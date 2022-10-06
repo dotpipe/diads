@@ -1,16 +1,20 @@
  /*
     Tags in script:
+        query       = default query string associated with url
         pipe        = name of id
         ajax        = calls and returns this file's ouput
-        file-order  = data-ajax to these files, iterating [0,1,2,3]%array.length
-        index       = counter of which index to use with file-order to go with data-ajax
-        redirect    = "follow" to go where the data-ajax says
+        file-order  = ajax to these files, iterating [0,1,2,3]%array.length per call
+        index       = counter of which index to use with file-order to go with ajax
+        incrIndex   = increment thru index of file-order (0 moves once) (default: 1)
+        decrIndex   = decrement thru index of file-order (0 moves once) (default: 1)
+        redirect    = "follow" the ajax call in POST or GET mode
+        mode        = "POST" or "GET" (default: "POST")
         data-pipe   = name of class for multi-tag data (augment with pipe)
         multiple    = states that this object has two or more key/value pairs
         remove      = remove element in tag
         display     = toggle visible and invisible
-        replace     = data-insert data-ajax callback return in this id
-        data-insert      = same as replace
+        replace     = data-insert ajax callback return in this id
+        data-insert = same as replace
         json        = returning a JSON
         !!! ALL HEADERS FOR data-AJAX are available. They will use defaults to
         !!! go on if there is no input to replace them.
@@ -21,7 +25,12 @@ function fileOrder(elem)
     arr = elem.getAttribute("file-order").split(",");
     index = parseInt(elem.getAttribute("index").toString());
     arr[index];
-    index++;
+    if (elem.hasAttribute("incrIndex"))
+        index += parseInt(elem.getAttribute("incrIndex").toString()) + 1;
+    if (elem.hasAttribute("decrIndex"))
+        index -= Math.abs(parseInt(elem.getAttribute("decrIndex").toString())) - 1;
+    if (index < 0)
+        index = arr.length-1;
     index = index%arr.length;
     elem.setAttribute("index",index.toString());
     pfc = elem.firstChild;
@@ -33,7 +42,7 @@ function fileOrder(elem)
 
 function display(elem)
 {
-            // Toggle visibility of CSS display style of object
+    // Toggle visibility of CSS display style of object
     if (elem.hasOwnProperty("display"))
     {
         var toggle = elem.getAttribute("display");
@@ -61,12 +70,6 @@ function remove(elem)
         doc_set.parentNode.removeChild(doc_set);
             
     }
-}
-
-function carousel(el)
-{
-
-
 }
 
 function setAJAXOpts(el)
@@ -117,7 +120,8 @@ function navigate(el) {
             var json = elem.getAttribute("opts").toString();
             var data=fs.readFileSync(json, 'utf8');
             var words=JSON.parse(data);
-            return setAJAXOpts(words);
+            var opts = setAJAXOpts(words);
+            captureAJAXResponse(elem, opts);
         }
         if (elem.hasAttribute("json") && elem.getAttribute("json"))
         {
@@ -133,7 +137,7 @@ function navigate(el) {
             document.getElementById(el.getElementById("insert").toString()).innerHTML = captureAJAXResponse(elem.getAttribute("ajax").toString());
         }
     }
-// This is a quick if to make a downloadable link in an href
+// This is a quick way to make a downloadable link in an href
     else if (ev.target.classList == "download")
     {
         var text = ev.target.getAttribute("file");
@@ -209,23 +213,10 @@ function pipe(ev)
             classToAJAX(elem);
 }
 
-    function makeCarousel (file)
-{
-    // give the current elem a chance to figure its link
-    var carousl = document.getElementById("carousel");
-    
-    if (carousl == undefined)
-        return;
-    
-    var carousel = document.getElementById("carousel");
-
-    carousel.innerHTML = '<table style="width:500;height:150;background-color:black;color:white;" id="carousel-table" ajax="' + file + '"><tr></tr></table>';
-    return;
-}
-
 function captureAJAXResponse(elem, opts) {
 
     f = 0;
+
 
     opts.forEach((e,f) => {
         let header_array = ["method","mode","cache","credentials","content-type","redirect","referrer"];
@@ -234,7 +225,6 @@ function captureAJAXResponse(elem, opts) {
         
     });
 
-   
     var opts_req = new Request(elem.getAttribute("ajax").toString());
     const abort_ctrl = new AbortController();
     const signal = abort_ctrl.signal;
@@ -266,7 +256,7 @@ function notify() {
     opts = new Map();
     f = 0;
 
-    ["method","mode","cache","credentials","content-type","redirect","referrer"].forEach((e,f) => {
+    collectURLData(elem).forEach((e,f) => {
         let header_array = ["POST","no-cors","no-cache"," ",'{"Access-Control-Allow-Origin":"*","Content-Type":"text/html"}', "manual", "client"];
 
         opts.set(e, header_array[f]);
@@ -333,7 +323,9 @@ function classToAJAX(elem) {
     opts = new Map();
     f = 0;
 
-    let elem_qstring = "";
+
+    elem_qstring = elem.getAttribute("query").toString();
+
     var elem_values = document.getElementsByClassName("data-pipe");
     
     // No, 'pipe' means it is generic. This means it is open season for all with this class
@@ -396,20 +388,4 @@ function classToAJAX(elem) {
 function rem(elem)
 {
     elem.remove();
-}
-
-function carouselScrollLeft(elem,pixels) {
-
-    elem.scrollX -= pixels;
-
-}
-
-function carouselScrollRight(elem,pixels) {
-
-    elem.scrollX += pixels;
-
-}
-
-function carouselXPos(elem) {
-    return elem.offsetLeft;
 }
