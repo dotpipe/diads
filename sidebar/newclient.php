@@ -1,19 +1,15 @@
-<?php
-
-// Sidebar for new user additions
-$form = '<h3 onclick=menuList(\'sidebar/menu.php\');>Menu</h3><li>';
-$form .= '<b style="font-size:18px;color:lightgray" onclick="javascript:mapView()">Click to Toggle Map</b></li>';
-$form .= '<form method="POST" action="marker.php"><label style="color:lightgray;">Enter your<br>Direct contact<br>information ';
-$form .= '<i style="color:red">required</i> <b style="color:red">*</b> : </label><br>';
-$form .= '<input required id="email" type="email" name="email" placeholder="Email"> <b style="color:red">*</b><br>';
-$form .= '<input required id="name" type="text" name="name" placeholder="Contact Person"> <b style="color:red">*</b><br>';
-$form .= '<input required id="alias" type="text" name="alias" placeholder="Alias for Chat"> <b style="color:red">*</b><br>';
-$form .= '<input required id="phone" type="phone" name="phone" placeholder="Phone Number"> <b style="color:red">*</b><br>';
-$form .= '<input required id="password" type="password" name="password" placeholder="Password"> <b style="color:red">*</b><br>';
-$form .= '<button onclick="submit">Welcome!</button><br>';
-$form .= '</form></div>';
-
-//$f = str_replace('"','\'',$form);
-//echo json_encode($f);
-echo $form;
-?>
+<div>
+	Enter Contact Information 
+	<input class="client-form" required id="name" type="text" name="id_name" placeholder="Contact Name"><br>
+	<input class="client-form" required id="addr1" type="text" name="id_addr1" placeholder="Address 1"><br>
+	<input class="client-form" id="name" type="text" name="id_addr2" placeholder="Address 2"><br>
+	<input class="client-form" required id="city" type="text" name="id_city" placeholder="City"><br>
+	<input class="client-form" required id="st" type="text" name="id_state" placeholder="State"><br>
+	<input class="client-form" required id="zip" type="text" name="id_zip" placeholder="Zip Code"><br>
+	<input class="client-form" required id="email" type="email" name="id_email" placeholder="Email"><br>
+	<input class="client-form" required id="alias" type="text" name="id_alias" placeholder="Chat Name"><br>
+	<input class="client-form" required id="phone" type="phone" name="id_phone" placeholder="Phone Number"><br>
+	<input class="client-form" required id="password1" type="password" name="id_password1" placeholder="Password"><br>
+	<input class="client-form" required id="password2" type="password" name="id_password2" placeholder="Confirm Password"><br>
+	<button onclick="pipes(this)" ajax="" form-class="client-form">Join Us!</button>
+</div>

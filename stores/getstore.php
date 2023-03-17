@@ -14,8 +14,8 @@ function getTax($con) {
 }
 
 // Create new chat files
-function makeMyFile($cnxn) {
-    $temp = 0;
+function makeMyChatFile($cnxn) {
+    $temp = time();
     
     $results = $cnxn->query('SELECT * FROM chat WHERE (aim = "' . $_COOKIE['myemail'] . '" || start = "' . $_COOKIE['myemail'] . '") &&  (aim = "' . $_COOKIE['store_id'] . '" || start = "' . $_COOKIE['store_id'] . '")');
     while ($row = $results->fetch_assoc()) {
@@ -23,16 +23,8 @@ function makeMyFile($cnxn) {
             return 1;
     }
     $row = $results->num_rows;
-    srand($row + $temp);
-    $temp = $row + rand(1,25);
-    srand($row + $temp);
-    $temp += rand(1,25);
-    srand($temp);
-    $temp += rand(1,25);
-    srand($row + $temp);
-    $temp += rand(1,25);
-    srand($temp);
-    $temp += rand(1,25);
+    srand(time() + $temp + rand(1,25));
+    $temp = rand(1,$temp + rand(1,25));
     
     if (!file_exists("xml/" . md5($temp) . ".xml")) {
         file_put_contents("xml/" . md5($temp) . ".xml", "<?xml version='1.0'?><?xml-stylesheet type='text/xsl' href='chatxml.xsl' ?><messages></messages>");
@@ -69,7 +61,7 @@ if ($results->num_rows > 0) {
         setcookie("store_id",$rows['email']);
     setcookie("contact",$rows['store_creditor']);
     setcookie("contact_alias",$rows['alias']);
-    while (!makeMyFile($conn));
+    while (!makeMyChatFile($conn));
     getTax($conn);
     
 }
