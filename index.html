@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<title>Adapt</title>
+		<script src="pipes.js"></script>
+	</head>
+
+	<body>
+		<table>
+			<tr>
+				<td id="navbar-header">
+					<h3>Home</h3>
+				</td>
+				<td id="home-divider" rowspan="2">
+					<div><hr height="100%" width="5px"></div>
+				</td>
+				<td rowspan="2">
+					<div id="page-inside">
+						<pipe ajax="init.php" target="page-inside">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div id="navbar">
+					<!-- Menu contents always here-->
+						<pipe ajax="navbar.php" target="navbar">
+					</div>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

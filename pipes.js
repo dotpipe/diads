@@ -1,385 +1,277 @@
- /*
-    Usable DOM Attributes:
-    query       = default query string associated with url
-    <pipe>      = immediately called pipe interaction upon onLoad
-    ajax        = calls and returns this files output
-    file-order  = ajax to these files, iterating [0,1,2,3]%array.length per call
-    index       = counter of which index to use with file-order to go with ajax
-    incrIndex   = increment thru index of file-order (0 moves once) (default: 1)
-    decrIndex   = decrement thru index of file-order (0 moves once) (default: 1)
-    redirect    = "follow" the ajax call in POST or GET mode
-    mode        = "POST" or "GET" (default: "POST")
-    data-pipe   = name of class for multi-tag data (augment with pipe)
-    multiple    = states that this object has two or more key/value pairs
-    remove      = remove element in tag
-    display     = toggle visible and invisible
-    replace     = insert ajax callback return in this id
-    insert      = same as replace
-    json        = returning a JSON
-    getOptions  = prepare for fs-opts options
-    fs-opts     = headers for AJAX implementation
-    headers     = headers in CSS markup-style-attribute
-    form-class  = class name of devoted form elements
-    !!! ALL HEADERS FOR AJAX are available. They will use defaults to
-    !!! go on if there is no input to replace them.
-*/
+ /**
+  *  only usage: onclick="pipes(this)"
+  *  to begin using the PipesJS code.
+  *  Usable DOM Attributes:
+  *  Attribute   |   Use Case
+  *  -------------------------------------------------------------
+  *  query.......= default query string associated with url
+  *  <pipe>......= Tag (initializes on DOMContentLoaded Event) // Possible deprecation
+  *  goto........= URI to go to
+  *  ajax........= calls and returns the value file's output
+  *  file-order..= ajax to these files, iterating [0,1,2,3]%array.length per call (delimited by ';')
+  *  class-switch= iterate through class sets, iterating [0,1,2,3]%array.length per call (delimited by ';')
+  *  file-index..= counter of which index to use with file-order to go with ajax
+  *  incrIndex...= increment thru index of file-order (0 moves once) (default: 1)
+  *  decrIndex...= decrement thru index of file-order (0 moves once) (default: 1)
+  *  redirect....= "follow" the ajax call in POST or GET mode
+  *  mode........= "POST" or "GET" (default: "POST")
+  *  data-pipe...= name of class for multi-tag data (augment with pipe)
+  *  multiple....= states that this object has two or more key/value pairs
+  *  remove......= remove element in tag
+  *  display.....= toggle visible and invisible of anything in the value (delimited by ';') this attribute
+  *  insert......= return ajax call to this id
+  *  json........= returns a JSON file set as value
+  *  fs-opts.....= JSON headers for AJAX implementation
+  *  headers.....= headers in CSS markup-style-attribute (delimited by '&')
+  *  link........= class for operating tag as clickable link
+  *  download....= class for downloading files
+  *  file........= filename to download
+  *  directory...= relative or full path of 'file'
+  *  form-class  = class name of devoted form elements
+  **** ALL HEADERS FOR AJAX are available. They will use defaults to
+  **** go on if there is no input to replace them.
+  */
 
-function fileOrder(elem)
-{
-    arr = elem.getAttribute("file-order").split(",");
-    index = parseInt(elem.getAttribute("index").toString());
-    arr[index];
-    if (elem.hasAttribute("incrIndex"))
-        index += parseInt(elem.getAttribute("incrIndex").toString()) + 1;
-    if (elem.hasAttribute("decrIndex"))
-        index -= Math.abs(parseInt(elem.getAttribute("decrIndex").toString())) - 1;
-    if (index < 0)
-        index = arr.length-1;
-    index = index%arr.length;
-    elem.setAttribute("index",index.toString());
-    pfc = elem.firstChild;
-    console.log(pfc);
-    console.log(index);
-    ppfc = pfc.nextElementSibling;
-    ppfc.setAttribute("src",arr[index]);
-}
 
-function display(elem)
-{
-    // Toggle visibility of CSS display style of object
-    if (elem.hasOwnProperty("display"))
-    {
-        var toggle = elem.getAttribute("display");
-        doc_set = document.getElementById(toggle);
-        if (document.getElementById(toggle) && doc_set.style.display !== "none"){
-            doc_set.style.display = "none";
+    document.addEventListener("DOMContentLoaded", function (){
+        doc_set = document.getElementsByTagName("pipe");
+        Array.from(doc_set).forEach(function(elem) {
+                setTimeout(pipes(elem),500);
+        });
+    });
+    
+  function fileOrder(elem)
+  {
+      arr = elem.getAttribute("file-order").split(";");
+      ppfc = document.getElementById(elem.getAttribute("insert").toString());
+      if (!ppfc.hasAttribute("file-index"))
+        ppfc.setAttribute("file-index", "0");
+      index = parseInt(ppfc.getAttribute("file-index").toString());
+      if (elem.hasAttribute("decrIndex"))
+          index = Math.abs(parseInt(ppfc.getAttribute("file-index").toString())) - 1;
+      else
+          index = Math.abs(parseInt(ppfc.getAttribute("file-index").toString())) + 1;
+      if (index < 0)
+          index = arr.length - 1;
+      index = index%arr.length;
+      ppfc.setAttribute("file-index",index.toString());
+     
+      console.log(ppfc);
+      if (ppfc.hasAttribute("src"))
+      {
+        try {
+            // <Source> tag's parentNode will need to be paused and resumed
+            // to switch the video
+            ppfc.parentNode.pause();
+            ppfc.parentNode.setAttribute("src",arr[index].toString());
+            ppfc.parentNode.load();
+            ppfc.parentNode.play();
         }
-        else if (document.getElementById(toggle) && doc_set.style.display === "none")
+        catch (e)
         {
-            doc_set.style.display = "block";
+            ppfc.setAttribute("src",arr[index].toString());
         }
-    }
-}
+      }
+      else
+      {
+          elem.setAttribute("ajax",arr[index].toString());
+          pipes(elem);
+      }
+  }
+  
+  function classOrder(elem)
+  {
+      arr = elem.getAttribute("class-switch").split(";");
+      if (!elem.hasAttribute("class-index"))
+        elem.setAttribute("class-index", "0");
+      index = parseInt(elem.getAttribute("class-index").toString());
+      if (elem.hasAttribute("incrIndex"))
+          index = parseInt(elem.getAttribute("incrIndex").toString()) + 1;
+      else if (elem.hasAttribute("decrIndex"))
+          index = Math.abs(parseInt(elem.getAttribute("decrIndex").toString())) - 1;
+      else
+          index++;
+      if (index < 0)
+          index = 0;
+      index = index%arr.length;
+      elem.setAttribute("class-index",index.toString());
+      elem.classList = arr[index];
+  }
 
-function remove(elem)
-{
-    // Remove Object
-    if (elem.hasOwnProperty("remove"))
-    {
-        var rem = elem.getAttribute("remove");
-        if (document.getElementById(rem)) {
-            doc_set = document.getElementById(rem);
-            doc_set.remove();
-        }
-        doc_set.parentNode.removeChild(doc_set);
-    }
-}
-
-function setAJAXOpts(elem, opts)
-{
-    // communicate properties of Fetch Request
-    var method_thru = (opts["method"] !== undefined) ? opts["method"] : (elem == undefined || !elem.hasAttribute("method")) ? "GET" : elem.getAttribute("method").toString();
-    var mode_thru = (opts["mode"] !== undefined) ? opts["mode"]: (elem == undefined || !elem.hasAttribute("mode")) ? "no-cors" : elem.getAttribute("mode").toString();
-    var cache_thru = (opts["cache"] !== undefined) ? opts["cache"]: (elem == undefined || !elem.hasAttribute("cred")) ? "no-cache" : elem.getAttribute("cache").toString();
-    var cred_thru = (opts["cred"] !== undefined) ? opts["cred"]: (elem == undefined || !elem.hasAttribute("cred")) ? "same-origin" : elem.getAttribute("cred").toString();
-    // updated "headers" attribute to more friendly "content-type" attribute
-    var content_thru = (opts["headers"] !== undefined) ? opts["headers"]: (elem.hasAttribute("headers")) ? '{"Access-Control-Allow-Origin":"*","Content-Type":"text/html"}' : elem.getAttribute("headers").toString();
-    var redirect_thru = (opts["redirect"] !== undefined) ? opts["redirect"]: (elem == undefined || !elem.hasAttribute("redirect")) ? "manual" : elem.getAttribute("redirect").toString();
-    var refer_thru = (opts["referrer"] !== undefined) ? opts["referrer"]: (elem == undefined || !elem.hasAttribute("referrer")) ? "client" : elem.getAttribute("referrer").toString();
-    opts = new Map();
-    opts.set("method", method_thru); // *GET, POST, PUT, DELETE, etc.
-    opts.set("mode", mode_thru); // no-cors, cors, *same-origin
-    opts.set("cache", cache_thru); // *default, no-cache, reload, force-cache, only-if-cached
-    opts.set("credentials", cred_thru); // include, same-origin, *omit
-    opts.set("content-type", content_thru); // content-type UPDATED**
-    opts.set("redirect", redirect_thru); // manual, *follow, error
-    opts.set("referrer", refer_thru); // no-referrer, *client
-    opts.set('body', JSON.stringify(content_thru));
-    const abort_ctrl = new AbortController();
-    const signal = abort_ctrl.signal;
-
-    return opts;
-}
-
-function navigate(el) {
-
-    elem = document.getElementById(el.id);
-
-    if (elem.hasAttribute("link"))
-    {
-        if (elem.hasAttribute("window"))
-        {
-            var newWindow = elem.getAttribute("window").toString();
-            if (newWindow !== undefined)
-                window.open(elem.getAttribute("link").toString(), newWindow);
+  function pipes(elem) {
+  
+      var query = "";
+      var headers = new Map();
+      var formclass = "";
+  
+      if (elem.classList.contains("redirect"))
+      {
+          window.location.href = elem.getAttribute("ajax") + ((elem.hasAttribute("query")) ? "?" + elem.getAttribute("query") : "");
+      }
+      if (elem.hasAttribute("display") && elem.getAttribute("display"))
+      {
+          var optsArray = elem.getAttribute("display").split(";");
+          optsArray.forEach((e,f) => {
+            var x = document.getElementById(e);
+            if (x.style.display !== "none")
+                x.style.display = "none";
             else
-                window.open(elem.getAttribute("link").toString(), "_new");
+                x.style.display = "block";
+          });
+      }
+      if (elem.hasAttribute("remove") && elem.getAttribute("remove"))
+      {
+          var optsArray = elem.getAttribute("remove").split(";");
+          optsArray.forEach((e,f) => {
+              var x = document.getElementById(e);
+              x.remove();
+          });
+      }
+      if (elem.classList.contains("link"))
+      {
+          window.location.href = elem.getAttribute("ajax");
+          return;
+      }
+      if (elem.hasAttribute("query"))
+      {
+          var optsArray = elem.getAttribute("query").split(";");
+  
+          optsArray.forEach((e,f) => {
+              var g = e.split(":");
+              query = query + g[0] + "=" + g[1] + "&";
+          });
+      }
+      if (elem.hasAttribute("headers"))
+      {
+          var optsArray = elem.getAttribute("headers").split("&");
+          optsArray.forEach((e,f) => {
+              var g = e.split(":");
+              headers.set(g[0], g[1]);
+          });
+      }
+      if (elem.hasAttribute("form-class"))
+      {
+            formclass = elem.getAttribute("form-class");
+      }
+      if (elem.hasAttribute("class-switch"))
+      {
+          classOrder(elem);
+      }
+      if (elem.hasAttribute("file-order"))
+      {
+          fileOrder(elem);
+      }
+      // Use a JSON to hold Header information
+      if (elem.hasAttribute("fs-opts"))
+      {
+          var fs=require('fs');
+          var json = elem.getAttribute("fs-opts").toString();
+          var data=fs.readFileSync(json, 'utf8');
+          var words=JSON.parse(data);
+      }
+      if (elem.hasAttribute("json") && elem.getAttribute("json"))
+      {
+          var fs=require('fs');
+          var json = elem.getAttribute("json").toString();
+          var data=fs.readFileSync(json, 'utf8');
+          var words=JSON.parse(data);
+      }
+      // This is a quick way to make a downloadable link in an href
+  //     else
+      if (elem.classList == "download")
+      {
+          var text = ev.target.getAttribute("file");
+          var element = document.createElement('a');
+          var location = ev.target.getAttribute("directory");
+          element.setAttribute('href', location + encodeURIComponent(text));
+          element.style.display = 'none';
+          document.body.appendChild(element);
+          element.click();
+          document.body.removeChild(element);
+          return;
+      }
+      navigate(elem, headers, query, formclass);
+  }
+  
+  function setAJAXOpts(elem, opts)
+  {
+      // communicate properties of Fetch Request
+      var method_thru = (opts["method"] !== undefined) ? opts["method"] : "GET";
+      var mode_thru = (opts["mode"] !== undefined) ? opts["mode"]: "no-cors";
+      var cache_thru = (opts["cache"] !== undefined) ? opts["cache"]: "no-cache";
+      var cred_thru = (opts["cred"] !== undefined) ? opts["cred"]: '{"Access-Control-Allow-Origin":"*"}';
+      // updated "headers" attribute to more friendly "content-type" attribute
+      var content_thru = (opts["content-type"] !== undefined) ? opts["content-type"]: '{"Content-Type":"text/html"}';
+      var redirect_thru = (opts["redirect"] !== undefined) ? opts["redirect"]: "manual";
+      var refer_thru = (opts["referrer"] !== undefined) ? opts["referrer"]: "referrer";
+      opts.set("method", method_thru); // *GET, POST, PUT, DELETE, etc.
+      opts.set("mode", mode_thru); // no-cors, cors, *same-origin
+      opts.set("cache", cache_thru); // *default, no-cache, reload, force-cache, only-if-cached
+      opts.set("credentials", cred_thru); // include, same-origin, *omit
+      opts.set("content-type", content_thru); // content-type UPDATED**
+      opts.set("redirect", redirect_thru); // manual, *follow, error
+      opts.set("referrer", refer_thru); // no-referrer, *client
+      opts.set('body', JSON.stringify(content_thru));
+  
+      return opts;
+  }
+
+  function formAJAX(elem, classname)
+  {
+      var elem_qstring = "";
+
+      // No, 'pipe' means it is generic. This means it is open season for all with this class
+      for (var i = 0; i < document.getElementsByClassName(classname).length; i++)
+      {
+          var elem_value = document.getElementsByClassName(classname)[i];
+          console.log(classname);
+          elem_qstring = elem_qstring + elem_value.name + "=" + elem_value.value + "&";
+          // Multi-select box
+          console.log(classname);
+          if (elem_value.hasOwnProperty("multiple"))
+          {
+              for (var o of elem_value.options) {
+                  if (o.selected) {
+                      elem_qstring = elem_qstring + "&" + elem_value.name + "=" + o.value;
+                  }
+              }
+          }
+      }
+      console.log(elem_qstring);
+      return (elem_qstring);
+  }
+  
+  function navigate(elem, opts = null, query = "", classname = "")
+  {
+      //formAJAX at the end of this line
+
+        elem_qstring = query + ((document.getElementsByClassName(classname).length > 0) ? formAJAX(elem, classname) : "");
+        elem_qstring = elem.getAttribute("ajax") + ((elem_qstring.length > 0) ? "?" + elem_qstring : "");
+        elem_qstring = encodeURI(elem_qstring);
+        opts = setAJAXOpts(elem, opts);
+        var opts_req = new Request(elem_qstring);
+        opts.set("mode",(opts["mode"] !== undefined) ? opts["mode"]: '"Access-Control-Allow-Origin":"*"');
+
+        var rawFile = new XMLHttpRequest();
+        rawFile.open(opts.get("method"), elem_qstring, true);
+        if (!elem.hasAttribute("json"))
+        {
+            rawFile.onreadystatechange = function() {
+                if (rawFile.readyState === 4) {
+                var allText = rawFile.responseText;
+                document.getElementById(elem.getAttribute("insert")).innerHTML = allText;
+                }
+            }
         }
         else
-            window.location.replace = elem.getAttribute("link").toString();
-    }
-    else if (elem.hasAttribute("ajax") && elem.getAttribute("ajax"))
-    {
-        if (elem.hasAttribute("headers"))
         {
-            var opts = new Map();
-            var optsArray = elem.getAttribute("headers").split(";");
-            optsArray.forEach((e,f) => {
-                var g = e.split(":");
-                opts.set(g[0], g[1]);
-            });
-            captureAJAXResponse(elem, opts);
-        }
-        if (elem.hasAttribute("fs-opts"))
-        {
-            var fs=require('fs');
-            var json = elem.getAttribute("fs-opts").toString();
-            var data=fs.readFileSync(json, 'utf8');
-            var words=JSON.parse(data);
-            var opts = setAJAXOpts(words);
-            captureAJAXResponse(elem, opts);
-        }
-        if (elem.hasAttribute("json") && elem.getAttribute("json"))
-        {
-            var fs=require('fs');
-            var json = elem.getAttribute("json").toString();
-            var data=fs.readFileSync(json, 'utf8');
-            var words=JSON.parse(data);
-            return words;
-        }
-        if (elem.hasAttribute("insert") && elem.getAttribute("insert"))
-        {
-            var url = collectURLData(el).toString();
-            document.getElementById(el.getElementById("insert").toString()).innerHTML = captureAJAXResponse(elem.getAttribute("ajax").toString());
-        }
-    }
-    // This is a quick way to make a downloadable link in an href
-    else if (ev.target.classList == "download")
-    {
-        var text = ev.target.getAttribute("file");
-        var element = document.createElement('a');
-        var location = ev.target.getAttribute("directory");
-        element.setAttribute('href', location + encodeURIComponent(text));
-
-        element.style.display = 'none';
-        document.body.appendChild(element);
-
-        element.click();
-
-        document.body.removeChild(element);
-
-        return;
-    }
-}
-
-function collectURLData(el)
-{
-    elem = document.getElementById(el.id);
-    //use 'data-pipe' as the classname to include its value
-    // specify which pipe with pipe="target.id"
-    var elem_values = document.getElementsByClassName("data-pipe");
-    var elem_qstring = (elem.hasAttribute("query")) ? elem.getAttribute("query").toString() : "";
-
-    // No, 'pipe' means it is generic. This means it is open season for all with this class
-    for (var i = 0; i < elem_values.length; i++) {
-    //if this is designated as belonging to another pipe, it won't be passed in the url
-        if (elem_values && !elem_values[i].hasOwnProperty("pipe") || elem_values[i].getAttribute("pipe") == elem.id)
-            elem_qstring = elem_qstring + elem_values[i].name + "=" + elem_values[i].value + "&";
-        // Multi-select box
-        console.log(".");
-        if (elem_values[i].hasOwnProperty("multiple"))
-        {
-            for (var o of elem_values.options) {
-                if (o.selected) {
-                    elem_qstring = elem_qstring + "&" + elem_values[i].name + "=" + o.value;
+            rawFile.onreadystatechange = function() {
+                if (rawFile.readyState === 4) {
+                    var allText = JSON.parse(rawFile.responseText);
+                    console.log(allText);
                 }
             }
         }
-    }
-    console.log(elem.getAttribute("ajax") + "?" + elem_qstring.substr(1));
-    elem_qstring = elem.getAttribute("ajax") + "?" + elem_qstring.substr(1);
-    return encodeURI(elem_qstring);
-}
-
-function pipe(ev)
-{
-    // This is a quick if to make a downloadable link in an href
-    if (ev.target.classList.contains("download"))
-    {
-        var text = ev.target.getAttribute("file");
-        var element = document.createElement('a');
-        var location = ev.target.getAttribute("directory");
-        element.setAttribute('href', location + encodeURIComponent(text));
-
-        element.style.display = 'none';
-        document.body.appendChild(element);
-
-        element.click();
-
-        document.body.removeChild(element);
-
-        return;
-    }
-    const elem = ev.target;
-    classToAJAX(elem);
-}
-
-function captureAJAXResponse(elem, opts)
-{
-    f = 0;
-
-    opts = setAJAXOpts(elem, opts);
-
-    var opts_req = new Request(elem.getAttribute("ajax").toString());
-    const abort_ctrl = new AbortController();
-    const signal = abort_ctrl.signal;
-
-    fetch(opts_req, {
-        signal
-    });
-
-    setTimeout(() => abort_ctrl.abort(), 10 * 1000);
-    const __grab = async (opts_req, opts) => {
-    return fetch(opts_req, opts)
-        .then(function(response) {
-            return response.text().then(function(text) {
-                if (response.status == 404)
-                    return;
-                return text;
-            });
-        });
-    }
-    return __grab(opts_req, opts);
-}
-
-function notify(targetname) {
-
-    elem = document.getElementsByTagName(targetname)[0];
-
-    opts = new Map();
-    f = 0;
-
-    collectURLData(elem).forEach((e,f) => {
-        let header_array = ["POST","no-cors","no-cache"," ",'{"Access-Control-Allow-Origin":"*","Content-Type":"text/html"}', "manual", "client"];
-        opts.set(e, header_array[f]);
-    });
-
-    content_thru = '{"Access-Control-Allow-Origin":"*","Content-Type":"text/html"}';
-    var opts_req = new Request(elem.getAttribute("ajax"));
-    opts.set('body', JSON.stringify({"Access-Control-Allow-Origin":"*","Content-Type":"text/html"}));
-    const abort_ctrl = new AbortController();
-    const signal = abort_ctrl.signal;
-
-    fetch(opts_req, {
-        signal
-    });
-
-    target__ = targetname;
-
-    setTimeout(() => abort_ctrl.abort(), 10 * 1000);
-    const __grab = async (opts_req, opts) => {
-    return fetch(opts_req, opts)
-        .then(function(response) {
-            if (response.status == 404)
-                    return;
-            return response.text().then(function(text) {
-                
-                    if (undefined == document.getElementsByTagName(targetname)[0]) {
-
-                        ppr = document.createElement(targetname);
-                        ppr.style.position = "absolute";
-                        ppr.style.backgroundColor = "navy";
-                        ppr.style.wordwrap = true;
-                        ppr.style.width = window.innerWidth / 4;
-                        ppr.style.zIndex = 3;
-                        p.innerText = text;
-                        p.style.position = "relative";
-                        ppr.setAttribute("notify-ms",3000);
-                        document.body.insertBefore(ppr,document.body.firstChild);
-                    }
-                    else {
-                        ppr = document.getElementsByTagName(targetname)[0];
-                    }
-                        let p = document.createElement("p");
-                        p.innerText = text;
-                        p.style.position = "relative";
-                        ppr.insertBefore(p,ppr.firstChild);
-                    var xy = parseInt(elem.getAttribute("notify-ms"));
-                    setTimeout(function(){
-                        ppr.removeChild(ppr.lastChild);
-                    }, xy);
-                return;
-            });
-        });
-    }
-    __grab(opts_req, opts);
-}
-
-function classToAJAX(elem) {
-
-
-    if (!elem)
-    return;
-
-    opts = new Map();
-    f = 0;
-
-
-    elem_qstring = elem.getAttribute("query").toString();
-
-    var elem_values = document.getElementsByClassName("data-pipe");
-
-    // No, 'pipe' means it is generic. This means it is open season for all with this class
-    for (var i = 0; i < elem_values.length; i++) {
-    //if this is designated as belonging to another pipe, it won't be passed in the url
-    if (elem_values && !elem_values[i].hasOwnProperty("pipe") || elem_values[i].getAttribute("pipe") == elem.id)
-        elem_qstring = elem_qstring + elem_values[i].name + "=" + elem_values[i].value + "&";
-    // Multi-select box
-    console.log(".");
-    if (elem_values[i].hasOwnProperty("multiple")) {
-        for (var o of elem_values.options) {
-            if (o.selected) {
-                elem_qstring = elem_qstring + "&" + elem_values[i].name + "=" + o.value;
-            }
-        }
-    }
-    }
-
-    elem_qstring = elem_qstring + "&" + elem.name + "=" + elem.value;
-    console.log(elem.getAttribute("ajax") + "?" + elem_qstring.substr(1));
-    elem_qstring = elem.getAttribute("ajax") + "?" + elem_qstring.substr(1);
-    elem_qstring = encodeURI(elem_qstring);
-
-    opts = setAJAXOpts(elem, opts);
-    content_thru = '{"Access-Control-Allow-Origin":"*","Content-Type":"text/html"}';
-    var opts_req = new Request(elem_qstring);
-    opts.set('body', JSON.stringify({"Access-Control-Allow-Origin":"*","Content-Type":"text/html"}));
-    const abort_ctrl = new AbortController();
-    const signal = abort_ctrl.signal;
-
-    fetch(opts_req, {
-        signal
-    });
-
-    setTimeout(() => abort_ctrl.abort(), 10 * 1000);
-    const __grab =  (opts_req, opts) => {
-    return fetch(opts_req, opts)
-        .then(function(response) {
-            if (response.status == 404)
-                return;
-            return response.text().then(function(text) {
-                {
-                    let td = '<p>' + text + '</p>';
-                    document.getElementById(elem.getAttribute("insert").toString()).innerHTML = td;
-                }
-                return;
-            });
-        });
-    }
-    __grab(opts_req, opts);
-}
-
-function rem(elem)
-{
-    elem.remove();
-}
+        rawFile.send();
+  }
+  

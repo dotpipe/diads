@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="pipes.js"></script>
+    <script src="j5.js"></script>
+    <style>
+        .wavetype
+        {
+            background-color: white;
+        }
+        .on {
+            background-color: lightsteelblue;
+        }
+    </style>
+</head>
+
+<body onload="checks()">
+    <label for="addOsc"><h1 id="addOsc" onclick="newOscillator()">+</h1></label>
+    <audio>
+        <source id="synthloops" type="video/mp4" src="WIN_20220905_11_36_58_Pro.mp4" />
+    </audio>
+    <table id="slidecontainer">
+        <tr class="stack">
+            <td>
+                <p class="oscillators" index="0" type="sine">
+                    <label for="media-control" class="wavetype" onclick="delOsc(this)">Undo</label>
+                    <label for="media-control" class="play on" onclick="playOsc(this)">Play</label>
+                    <label for="media-control" class="play" onclick="pauseOsc(this)">Pause</label>
+                    <label for="media-control" class="wavetype on" onclick="changeType(this,'sine')" name="sine">Sine</label>
+                    <label for="media-control" class="wavetype" onclick="changeType(this,'sawtooth')" name="sawtooth">Sawtooth</label>
+                    <label for="media-control" class="wavetype" onclick="changeType(this,'square')" name="square">Square</label>
+                    <label for="media-control" class="wavetype" onclick="changeType(this,'triangle')" name="triangle">Triangle</label><br>
+                    <span style="margin-left:210px;position:relative;"><b style="width:350px;text-align:justify">|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|</b></span><br>
+                    <label for="hz-control">Change Frequency of Oscillator</label><input onchange="oscillate(this);" type="range" min="16.8" max="2150.4" value="0" class="slider hz-control"><c></c><br>
+                    <label for="panning-control">Change Panning of Oscillator</label><input onchange="pan(this);" type="range" min="-1000" max="1000" value="0" class="slider panning-control"><c></c><br>
+                    <label for="volume-control">Change Volume of Oscillator</label><input onchange="volume(this);" type="range" min="0" max="100" value="25" class="slider volume-control"><c></c><br>
+                    <canvas id="canvas"></canvas>
+                </p>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
