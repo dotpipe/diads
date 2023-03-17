@@ -11,8 +11,8 @@
   *  file-order..= ajax to these files, iterating [0,1,2,3]%array.length per call (delimited by ';')
   *  class-switch= iterate through class sets, iterating [0,1,2,3]%array.length per call (delimited by ';')
   *  file-index..= counter of which index to use with file-order to go with ajax
-  *  incrIndex...= increment thru index of file-order (0 moves once) (default: 1)
-  *  decrIndex...= decrement thru index of file-order (0 moves once) (default: 1)
+  *  incrIndex...= increment thru index of file-order (default: 1)
+  *  decrIndex...= decrement thru index of file-order (default: 1)
   *  redirect....= "follow" the ajax call in POST or GET mode
   *  mode........= "POST" or "GET" (default: "POST")
   *  data-pipe...= name of class for multi-tag data (augment with pipe)
