@@ -1,7 +1,7 @@
  /*
     Usable DOM Attributes:
     query       = default query string associated with url
-    pipe        = name of id
+    <pipe>      = immediately called pipe interaction upon onLoad
     ajax        = calls and returns this files output
     file-order  = ajax to these files, iterating [0,1,2,3]%array.length per call
     index       = counter of which index to use with file-order to go with ajax
