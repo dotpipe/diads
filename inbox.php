@@ -16,7 +16,7 @@ $chat .= '<br><a onclick=getInbox(\'h\',1)>Click here for On Hold</a><br>';
 $chat .= '<br><a onclick=getInbox(\'o\',1)>Click here for Ordered</a><br>';
 $chat .= '<br><a onclick=getInbox(\'c\',1)>Click here for Canceled</a><br>';
 $chat .= '</div></td></tr></table>';
-$chat .= '<div style="font-size:12px;color:lightgray">Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/"         title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"         title="Creative Commons BY 3.0" insert="_blank">CC 3.0 BY</a></div>';
+$chat .= '<div style="font-size:12px;color:lightgray">Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/"         title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"         title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>';
 
 $g = str_replace('"',"\'",$chat);
 //echo json_encode($chat);

@@ -43,7 +43,7 @@
   function fileOrder(elem)
   {
       arr = elem.getAttribute("file-order").split(";");
-      ppfc = document.getElementById(elem.getAttribute("insert").toString());
+      ppfc = document.getElementById(elem.getAttribute("target").toString());
       if (!ppfc.hasAttribute("file-index"))
         ppfc.setAttribute("file-index", "0");
       index = parseInt(ppfc.getAttribute("file-index").toString());
@@ -259,7 +259,7 @@
             rawFile.onreadystatechange = function() {
                 if (rawFile.readyState === 4) {
                 var allText = rawFile.responseText;
-                document.getElementById(elem.getAttribute("insert")).innerHTML = allText;
+                document.getElementById(elem.getAttribute("target")).innerHTML = allText;
                 }
             }
         }

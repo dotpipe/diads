@@ -15,7 +15,7 @@
 				</td>
 				<td rowspan="2">
 					<div id="page-inside">
-						<pipe ajax="init.php" insert="page-inside">
+						<pipe ajax="init.php" target="page-inside">
 					</div>
 				</td>
 			</tr>
@@ -23,7 +23,7 @@
 				<td rowspan="2">
 					<div id="navbar">
 					<!-- Menu contents always here-->
-						<pipe ajax="navbar.php" insert="navbar">
+						<pipe ajax="navbar.php" target="navbar">
 					</div>
 				</td>
 			</tr>

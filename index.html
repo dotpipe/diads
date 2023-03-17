@@ -3,6 +3,13 @@
 		<title>Adapt</title>
 	</head>
 
+	<style>
+		#navbar
+		{
+			vertical-align: top;
+			top:0%;
+		}
+	</style>
 	<body>
 		<table>
 			<tr>
@@ -14,15 +21,15 @@
 				</td>
 				<td rowspan="2">
 					<div id="page-inside">
-						<pipe ajax="init.php" insert="page-inside">
+						<pipe ajax="init.php" target="page-inside">
 					</div>
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td style="vertical-align: top;">
 					<div id="navbar">
 					<!-- Menu contents always here-->
-						<pipe ajax="navbar.html" insert="navbar">
+						<pipe ajax="navbar.html" target="navbar">
 					</div>
 				</td>
 			</tr>
