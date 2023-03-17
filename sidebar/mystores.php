@@ -3,4 +3,4 @@
 <tr><td colspan=2 style="background:black;border:0px;height:300px;width:250px">
 <div id="storepane" style="border:2px solid darkblue;overflow-wrap:break-word;overflow-y:scroll;color:lightgray;background:black;height:300px;width:250px">
 <br><br><br><br><br><a onclick="getStores('m')">Click here to view Stores</a></div></td></tr></table>
-<div style="font-size:12px;color:lightgray">Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/"         title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"         title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+<div style="font-size:12px;color:lightgray">Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/"         title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"         title="Creative Commons BY 3.0" insert="_blank">CC 3.0 BY</a></div>

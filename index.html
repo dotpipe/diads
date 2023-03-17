@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>Adapt</title>
-		<script src="pipes.js"></script>
+		<script src="pipes/pipes.js"></script>
 	</head>
 
 	<body>
@@ -15,7 +15,7 @@
 				</td>
 				<td rowspan="2">
 					<div id="page-inside">
-						<pipe ajax="init.php" target="page-inside">
+						<pipe ajax="init.php" insert="page-inside">
 					</div>
 				</td>
 			</tr>
@@ -23,7 +23,7 @@
 				<td>
 					<div id="navbar">
 					<!-- Menu contents always here-->
-						<pipe ajax="navbar.php" target="navbar">
+						<pipe ajax="navbar.html" insert="navbar">
 					</div>
 				</td>
 			</tr>
