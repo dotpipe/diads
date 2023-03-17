@@ -1,5 +1,5 @@
 <table style="border:1px solid black;padding:3px;spacing:0px;width:250px;">
-<tr><td><select id="chatters" onclick="listConvo()" onchange="getOption()"><option default value="" label="Click To see chats waiting"></select></td>
+<tr><td><select id="chatters" onclick="listConvo()" onchange="getOption()" width="175"><option default value="" label="Click To see chats waiting"></select></td>
 <td><button onclick="setConduct(this)" style="border-radius:50%;color:green">&check;</button></td></tr></table>
 <div id="chatpane">
 <table>

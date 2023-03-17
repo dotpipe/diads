@@ -1,5 +1,5 @@
 <div>
-	Enter Contact Information 
+	Enter Contact Information <br>
 	<input class="client-form" required id="name" type="text" name="id_name" placeholder="Contact Name"><br>
 	<input class="client-form" required id="addr1" type="text" name="id_addr1" placeholder="Address 1"><br>
 	<input class="client-form" id="name" type="text" name="id_addr2" placeholder="Address 2"><br>

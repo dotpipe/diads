@@ -1,9 +1,9 @@
-<dyn style="font-size:16;color:red;">Preorder Items <?= echo $_COOKIE['store'] ?></dyn><br>
+<dyn style="font-size:16;color:red;">Preorder Items <?= $_COOKIE['store'] ?></dyn><br>
 
-<input class="form-order" type="number" id="days" alt="Deliver In XX Days"><br>
+<label for="days"> Days Till Due:&nbsp;&nbsp;&nbsp; <input class="form-order" type="number" id="days"></label><br>
 <div id="preorders">
-<input required type="text" class="form-order item" placeholder="Item name">
-<h3 style="font-size:12px"> Qu: </h3><input id="qu" type="number" class="quantity" style="display:table-cell;width:24px;" value=1 min=0 required>
+<label for="days"> Product's Name: <input required type="text" class="form-order item">
+<h3 style="font-size:12px"> Quantity: </h3><input id="qu" type="number" class="quantity" style="display:table-cell;width:100px;" value=1 min=0 required>
 <button style="background:red;color:black;border-radius:50%;font-size:18px;border-right:1px solid white;" onclick="pipes(this)" form-class="remove">&times;</button>
 </div>
 <div style="width:100%;display:table">

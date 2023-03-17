@@ -1,7 +1,7 @@
 <div>
-	<label style="color:lightgray;">Enter your Store contact information 
-	<input class="business-form" id="manager" type="text" name="manager" placeholder="Manager Name" value="' . $_COOKIE['myname'] . '"><br>
-	<input class="business-form" id="email" type="email" name="email" placeholder="Manager Email" value="' . $_COOKIE['myemail'] . '"><br>
+	<label style="color:lightgray;">Enter your Store contact information <br>
+	<input class="business-form" id="manager" type="text" name="manager" placeholder="Manager Name" value="<?= $_COOKIE['myname'] ?>"><br>
+	<input class="business-form" id="email" type="email" name="email" placeholder="Manager Email" value="<?= $_COOKIE['myemail'] ?>"><br>
 	<input class="business-form" id="password" type="password" name="password" placeholder="Store Password"><br>
 	<input class="business-form" id="addr" style="background:white" name="address" type="text" placeholder="Address"><br>
 	<input class="business-form" id="ph" style="background:white" name="phone" type="text" placeholder="Phone Number"><br>
