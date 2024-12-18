@@ -1,24 +1,36 @@
-<?php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diads - Secure Inbox</title>
+    <link rel="stylesheet" href="css/inbox_styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="inbox-header">
+            <h1>Secure Inbox</h1>
+            <button id="compose-btn" onclick="openComposeModal()">Compose</button>
+            <div class="inbox-tabs">
+                <div class="inbox-tab active" onclick="switchTab('messages')">Messages</div>
+                <div class="inbox-tab" onclick="switchTab('mail')">Mail</div>
+            </div>
+        </div>
+        <div id="inbox-content"></div>
+    </div>
 
+    <div id="compose-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeComposeModal()">&times;</span>
+            <h2>Compose Message</h2>
+            <input type="text" id="recipient" placeholder="Recipient">
+            <input type="text" id="subject" placeholder="Subject">
+            <textarea id="message-body" placeholder="Write your message here"></textarea>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
 
-    
-// Sidebar for Inbox (For window)
-$chat = "<h3 onclick=menuList('menu.php')>Menu</h3>";
-$chat .= '<li><b style=\'font-size:18px;color:lightgray\' onclick=\'javascript:mapView()\'>Click to Toggle Map</b></li>';
-$chat .= '<table style=\'border:1px solid black;padding:3px;spacing:0px;width:250px;height:300px\'>';
-$chat .= '<tr><td><b style=\'font-size:15px;color:red\'>Welcome to your Inbox!</b> : : <br><i style=\'font-size:10px;\'>Read who\'s coming in!</i></td>';
-$chat .= '<td><button onclick=\'clearChat();\' style=\'vertical-alignment:bottom;border-radius:50%;color:green\'>&check;</button></td></tr>';
-$chat .= '<tr><td colspan=2 style=\'background:black;border:0px;height:300px;width:250px\'>';
-$chat .= '<div id=\'chatpane\' style=\'border:2px solid darkblue;overflow-wrap:break-word;overflow-y:scroll;color:lightgray;background:black;height:300px;width:250px\'>';
-$chat .= '<center><br><a onclick=getInbox(\'li\')>Click here To Open Inbox</a><br>';
-$chat .= '<br><a onclick=getInbox(\'d\',1)>Click here for Delivered</a><br>';
-$chat .= '<br><a onclick=getInbox(\'h\',1)>Click here for On Hold</a><br>';
-$chat .= '<br><a onclick=getInbox(\'o\',1)>Click here for Ordered</a><br>';
-$chat .= '<br><a onclick=getInbox(\'c\',1)>Click here for Canceled</a><br>';
-$chat .= '</div></td></tr></table>';
-$chat .= '<div style="font-size:12px;color:lightgray">Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/"         title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"         title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>';
-
-$g = str_replace('"',"\'",$chat);
-//echo json_encode($chat);
-echo $chat;
-?>
+    <script src="js/encryption.js"></script>
+    <script src="js/inbox.js"></script>
+</body>
+</html>

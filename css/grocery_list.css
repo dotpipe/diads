@@ -1,0 +1,42 @@
+
+body {
+    font-size: 18px; /* Increase base font size */
+}
+
+h1 {
+    font-size: 2.5em; /* Larger headings */
+}
+
+h2 {
+    font-size: 2em;
+}
+
+.store-item, .inventory-item {
+    font-size: 1.2em; /* Larger text for store and inventory items */
+}
+
+button {
+    font-size: 1.1em; /* Larger text for buttons */
+    padding: 12px 20px; /* Increase button size for easier tapping */
+}
+
+/* Improve contrast */
+body {
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+.store-item, .inventory-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+button {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+/* Add focus styles for keyboard navigation */
+button:focus, input:focus {
+    outline: 3px solid #0056b3;
+}

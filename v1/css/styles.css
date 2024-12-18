@@ -1,0 +1,27 @@
+.item-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.item-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.item-name {
+    font-weight: bold;
+}
+
+.item-price {
+    color: green;
+}
+
+.item-quantity {
+    color: blue;
+}
+
+.item-store {
+    font-style: italic;
+}
