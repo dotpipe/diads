@@ -18,3 +18,15 @@ socket.onmessage = function(event) {
     }
     updateInbox(message);
 };
+
+socket.onclose = function(event) {
+    if (!event.wasClean) {
+        setTimeout(() => {
+            window.location.reload();
+        }, 5000);
+    }
+};
+
+socket.onerror = function(error) {
+    console.error('WebSocket error:', error.message);
+};

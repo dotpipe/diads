@@ -1,5 +1,5 @@
 <?php
-require_once '../api/token_middleware.php';
+require_once '../v1/api/token_middleware.php';
 require_once '../config/database.php';
 
 $token = validateToken();

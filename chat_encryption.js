@@ -4,7 +4,7 @@ async function sendChatMessage() {
     const message = messageInput.value;
     if (message) {
         const encryptedMessage = await encryptMessage(message);
-        fetch('/api/save_chat.php', {
+        fetch('/v1/api/save_chat.php', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${apiToken}`,

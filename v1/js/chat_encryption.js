@@ -110,7 +110,7 @@ function sendChatMessage() {
 }
 
 function saveChatMessage(encryptedMessage) {
-    fetch('/api/save_chat.php', {
+    fetch('/v1/api/save_chat.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

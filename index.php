@@ -1,4 +1,5 @@
-<?php include 'includes/header.php'; ?>
+<?php include 'v1/includes/header.php'; ?>
+<script src="dotpipe.js"></script>
 <main>
     <h1>Welcome to Diads</h1>
     <section id="search">
@@ -8,4 +9,4 @@
         <!-- Filled orders will be displayed here -->
     </section>
 </main>
-<?php include 'includes/footer.php'; ?>
+<?php include 'v1/includes/footer.php'; ?>

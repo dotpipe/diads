@@ -7,14 +7,14 @@ use MyApp\Encryption\ServerEncryption;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
- = new ServerEncryption();
- = new Chat();
+$encryption = new ServerEncryption();
+$chat = new Chat($encryption);
 
- = IoServer::factory(
+$server = IoServer::factory(
     new HttpServer(
-        new WsServer()
+        new WsServer($chat)
     ),
     8080
 );
 
-->run();
+$server->run();

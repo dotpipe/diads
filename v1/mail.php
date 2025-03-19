@@ -88,7 +88,7 @@
     <script src="js/encryption.js"></script>
     <script>
         async function loadInboxContent(type = 'messages') {
-            const response = await fetch(`api/get_${type}.php`);
+            const response = await fetch(`/v1/api/get_${type}.php`);
             const messages = await response.json();
 
             const contentDiv = document.getElementById('inbox-content');

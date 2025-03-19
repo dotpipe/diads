@@ -1,5 +1,5 @@
 function loadAggregatedInventory() {
-    fetch('/api/aggregated_inventory.php')
+    fetch('/v1/api/aggregated_inventory.php')
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {

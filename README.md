@@ -64,11 +64,11 @@ Basic configuration can be set in `config.php`:
 - ZIP Codes
 
 ## API Endpoints
-- `/api/search.php`: Item search functionality
-- `/api/orders.php`: Order management
-- `/api/list.php`: Shopping list management
-- `/api/save_chat.php`: Chat message storage
-- `/api/aggregated_inventory.php`: Inventory data
+- `/v1/api/search.php`: Item search functionality
+- `/v1/api/orders.php`: Order management
+- `/v1/api/list.php`: Shopping list management
+- `/v1/api/save_chat.php`: Chat message storage
+- `/v1/api/aggregated_inventory.php`: Inventory data
 
 ## Note
 Some components appear to be in development or require additional implementation:

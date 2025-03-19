@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Management System</title>
+    <script src="dotpipe.js"></script>
     <style>
         body {
             margin: 0;
@@ -102,7 +103,7 @@
 
         function searchItems() {
             const query = document.getElementById('search-input').value;
-            fetch(`/api/search.php?q=${query}&apiKey=${apiKey}`)
+            fetch(`/v1/api/search.php?q=${query}&apiKey=${apiKey}`)
                 .then(response => response.json())
                 .then(data => displaySearchResults(data));
         }
@@ -129,7 +130,7 @@
         }
 
         function showItemList() {
-            fetch(`/api/item_list.php?apiKey=${apiKey}`)
+            fetch(`/v1/api/item_list.php?apiKey=${apiKey}`)
                 .then(response => response.json())
                 .then(data => displayItemList(data));
         }
@@ -152,7 +153,7 @@
 
         function checkoutList() {
             if (confirm('Did you get what you need?')) {
-                fetch(`/api/checkout.php?apiKey=${apiKey}`, {method: 'POST'})
+                fetch(`/v1/api/checkout.php?apiKey=${apiKey}`, {method: 'POST'})
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
@@ -164,7 +165,7 @@
         }
 
         function showOrders() {
-            fetch(`/api/orders.php?apiKey=${apiKey}`)
+            fetch(`/v1/api/orders.php?apiKey=${apiKey}`)
                 .then(response => response.json())
                 .then(data => displayOrders(data));
         }

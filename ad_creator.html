@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Creator</title>
+    <style>
+        .ad-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .ad-element {
+            border: 1px solid #000;
+            padding: 10px;
+            background-color: #f9f9f9;
+            cursor: move;
+            resize: both;
+            overflow: auto;
+        }
+        /* Responsive layout */
+        @media (max-width: 600px) {
+            .ad-container {
+                padding: 5px;
+                gap: 5px;
+            }
+            .ad-element {
+                margin-bottom: 5px;
+            }
+            label {
+                display: block;
+                margin-bottom: 5px;
+            }
+            input[type="text"] {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+        @media (min-width: 601px) and (max-width: 1024px) {
+            .ad-container {
+                padding: 10px;
+                gap: 10px;
+            }
+            .ad-element {
+                margin-bottom: 10px;
+            }
+            label {
+                display: block;
+                margin-bottom: 10px;
+            }
+            input[type="text"] {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+        @media (min-width: 1025px) {
+            .ad-container {
+                padding: 15px;
+                gap: 15px;
+            }
+            .ad-element {
+                margin-bottom: 15px;
+            }
+            label {
+                display: inline-block;
+                margin-right: 10px;
+            }
+            input[type="text"] {
+                width: auto;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Ad Creator</h1>
+    <form id="ad-form" action="save_ad.php" method="POST">
+        <div id="ad-container" class="ad-container"></div>
+        <button type="button" onclick="addTextElement()">Add Text</button>
+        <button type="button" onclick="addImageElement()">Add Image</button>
+        <button type="button" onclick="generateJSON()">Generate JSON</button>
+        <button type="submit">Save Ad</button>
+        <input type="hidden" name="ad_data" id="ad-data">
+    </form>
+    <pre id="json-output"></pre>
+
+    <script>
+        function addTextElement() {
+            const container = document.getElementById('ad-container');
+            const textElement = document.createElement('div');
+            textElement.className = 'ad-element';
+            textElement.draggable = true;
+            textElement.innerHTML = `
+                <label>Text: <input type="text" class="ad-text"></label>
+                <button type="button" onclick="removeElement(this)">Remove</button>
+            `;
+            container.appendChild(textElement);
+            addDragAndDrop(textElement);
+        }
+
+        function addImageElement() {
+            const container = document.getElementById('ad-container');
+            const imageElement = document.createElement('div');
+            imageElement.className = 'ad-element';
+            imageElement.draggable = true;
+            imageElement.innerHTML = `
+                <label>Image URL: <input type="text" class="ad-image"></label>
+                <button type="button" onclick="removeElement(this)">Remove</button>
+            `;
+            container.appendChild(imageElement);
+            addDragAndDrop(imageElement);
+        }
+
+        function removeElement(button) {
+            button.parentElement.remove();
+        }
+
+        function generateJSON() {
+            const container = document.getElementById('ad-container');
+            const elements = container.getElementsByClassName('ad-element');
+            const adJSON = {
+                tagname: 'div',
+                children: []
+            };
+
+            Array.from(elements).forEach(element => {
+                const textInput = element.querySelector('.ad-text');
+                const imageInput = element.querySelector('.ad-image');
+
+                const gridColumn = element.style.gridColumn;
+                const gridRow = element.style.gridRow;
+
+                if (textInput) {
+                    adJSON.children.push({
+                        tagname: 'p',
+                        textContent: textInput.value,
+                        gridColumn: gridColumn,
+                        gridRow: gridRow
+                    });
+                } else if (imageInput) {
+                    adJSON.children.push({
+                        tagname: 'img',
+                        attributes: {
+                            src: imageInput.value
+                        },
+                        gridColumn: gridColumn,
+                        gridRow: gridRow
+                    });
+                }
+            });
+
+            document.getElementById('json-output').textContent = JSON.stringify(adJSON, null, 2);
+            document.getElementById('ad-data').value = JSON.stringify(adJSON);
+        }
+
+        function addDragAndDrop(element) {
+            element.addEventListener('dragstart', dragStart);
+            element.addEventListener('dragover', dragOver);
+            element.addEventListener('drop', drop);
+            element.addEventListener('dragend', dragEnd);
+        }
+
+        function dragStart(event) {
+            event.dataTransfer.setData('text/plain', event.target.id);
+            setTimeout(() => {
+                event.target.style.display = 'none';
+            }, 0);
+        }
+
+        function dragOver(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const id = event.dataTransfer.getData('text');
+            const draggableElement = document.getElementById(id);
+            draggableElement.style.display = 'block';
+            const dropzone = event.target.closest('.ad-container');
+            dropzone.appendChild(draggableElement);
+
+            const gridColumnStart = Math.floor(event.clientX / (dropzone.clientWidth / 3)) + 1;
+            const gridRowStart = Math.floor(event.clientY / (dropzone.clientHeight / 3)) + 1;
+
+            draggableElement.style.gridColumn = `${gridColumnStart} / span 1`;
+            draggableElement.style.gridRow = `${gridRowStart} / span 1`;
+        }
+
+        function dragEnd(event) {
+            event.target.style.display = 'block';
+        }
+
+        document.querySelectorAll('.ad-element').forEach(addDragAndDrop);
+    </script>
+</body>
+</html>
